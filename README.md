@@ -5,8 +5,8 @@
 <h1 align="center">Roost</h1>
 
 <p align="center">
-  <b>התקנה והרצה של אפליקציות אנדרואיד על Windows 11 — עם קיצור דרך מקורי לכל אפליקציה.</b><br>
-  <b>Install and run Android apps on Windows 11 — with a native shortcut for every app.</b>
+  <b>התקנה והרצה של אפליקציות אנדרואיד ותוכנות Linux על Windows 11 — עם קיצור דרך מקורי לכל אפליקציה.</b><br>
+  <b>Install and run Android apps and Linux software on Windows 11 — with a native shortcut for every app.</b>
 </p>
 
 <p align="center">
@@ -69,6 +69,9 @@ Roost installs Android apps and runs them on Windows 11. It **does not run Andro
 
 ### How it works
 A tool can't run Android apps by itself — it talks to an engine. Roost connects to the engine's ADB endpoint (WSA on `127.0.0.1:58526`, emulators on their own ports), runs `adb install` / `install-multiple`, and writes a native `.lnk` that re-launches each app through Roost (`--launch`), so it behaves like a normal Windows program.
+
+### Linux apps (WSL)
+The **Linux apps** page runs Linux GUI software on Windows 11 through **WSL 2 + WSLg** (real, first-class on Windows 11 — not a hack). Roost detects your distributions, installs packages with `apt`, lists the installed GUI apps from their `.desktop` entries, and launches them or pins a native Start-Menu shortcut. WSL 2 needs the Virtual Machine Platform feature (`wsl --install`).
 
 ### Why no iOS / macOS yet
 iOS and macOS apps need Apple's own OS (Darwin/XNU) and frameworks, normally on Apple hardware. There is no working, general way to run them natively on Windows, so Roost does **not** pretend to — that support is on the roadmap only if a viable runtime path is validated, and will meet the same quality bar as Android.

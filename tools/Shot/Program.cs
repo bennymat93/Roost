@@ -36,11 +36,24 @@ var window = new MainWindow { DataContext = vm };
 window.FlowDirection = Localizer.Instance.Flow;
 window.Show();
 
-string[] pages = { "dashboard", "install", "apps", "engines", "settings", "about" };
+string[] pages = { "dashboard", "install", "apps", "engines", "linux", "settings", "about" };
 for (int i = 0; i < pages.Length; i++)
 {
     vm.Navigate(i);
     Dispatcher.UIThread.RunJobs();
+
+    if (pages[i] == "linux")
+    {
+        // seed after navigation (navigation would otherwise run a real WSL probe)
+        vm.Linux.WslInstalled = true;
+        vm.Linux.Distros.Clear();
+        vm.Linux.Distros.Add(new WslDistro { Name = "Ubuntu-22.04", State = "Running", Version = 2, IsDefault = true });
+        vm.Linux.Distros.Add(new WslDistro { Name = "Debian", State = "Stopped", Version = 2 });
+        vm.Linux.Apps.Clear();
+        vm.Linux.Apps.Add(new LinuxApp { Name = "GIMP", Exec = "gimp", Distro = "Ubuntu-22.04" });
+        vm.Linux.Apps.Add(new LinuxApp { Name = "LibreOffice Writer", Exec = "libreoffice --writer", Distro = "Ubuntu-22.04" });
+        vm.Linux.Apps.Add(new LinuxApp { Name = "Inkscape", Exec = "inkscape", Distro = "Ubuntu-22.04" });
+    }
     // give layout a couple of passes
     for (int k = 0; k < 3; k++) Dispatcher.UIThread.RunJobs();
     var frame = window.CaptureRenderedFrame();

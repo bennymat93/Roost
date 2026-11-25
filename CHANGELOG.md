@@ -4,6 +4,25 @@ All notable changes to Roost are documented here.
 This project follows [Semantic Versioning](https://semver.org/): every change,
 addition or fix bumps the version number.
 
+## [1.1.0] - 2025-11-25
+
+Added Linux app support.
+
+### Added
+- **Linux apps (WSL)** page — run Linux GUI software on Windows 11 through
+  **WSL 2 + WSLg**:
+  - Detects WSL and lists installed distributions; clear guidance when WSL is
+    missing (`wsl --install`).
+  - Installs packages with `apt` from inside the app.
+  - Enumerates installed GUI apps from their `.desktop` entries and **launches**
+    them (WSLg renders the window), or pins a **native Start-Menu shortcut** that
+    re-launches them through Roost (`--launch-linux`, no console flash).
+- English + Hebrew strings for the Linux page.
+
+### Notes
+- Like Android, Roost orchestrates the runtime (here WSL) rather than replacing
+  it; WSL 2 requires the Virtual Machine Platform feature.
+
 ## [1.0.0] - 2025-11-25
 
 First release — Android support.

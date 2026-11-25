@@ -19,6 +19,10 @@ internal static class Program
         if (li >= 0 && args.Length >= li + 3)
             return LaunchHeadless(args[li + 1], args[li + 2]).GetAwaiter().GetResult();
 
+        var ll = Array.IndexOf(args, "--launch-linux");
+        if (ll >= 0 && args.Length >= ll + 3)
+            return LaunchLinuxHeadless(args[ll + 1], args[ll + 2]).GetAwaiter().GetResult();
+
         var ii = Array.IndexOf(args, "--install");
         if (ii >= 0 && args.Length >= ii + 2)
             PendingInstallFile = args[ii + 1];
@@ -42,6 +46,16 @@ internal static class Program
                 await adb.ConnectAsync(engineId[..i], port);
             }
             var r = await adb.LaunchAsync(engineId, package);
+            return r.Ok ? 0 : 1;
+        }
+        catch { return 1; }
+    }
+
+    private static async Task<int> LaunchLinuxHeadless(string distro, string exec)
+    {
+        try
+        {
+            var r = await WslService.LaunchAsync(distro, exec);
             return r.Ok ? 0 : 1;
         }
         catch { return 1; }

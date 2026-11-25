@@ -33,11 +33,12 @@ public sealed class Localizer
     {
         // App / nav
         ["App_Name"] = ("Roost", "Roost"),
-        ["App_Tagline"] = ("Android apps, at home on Windows", "אפליקציות אנדרואיד, מרגישות בבית ב-Windows"),
+        ["App_Tagline"] = ("Android & Linux apps, at home on Windows", "אפליקציות אנדרואיד ו-Linux, בבית ב-Windows"),
         ["Nav_Dashboard"] = ("Dashboard", "סקירה"),
         ["Nav_Install"] = ("Install app", "התקנת אפליקציה"),
         ["Nav_Apps"] = ("My apps", "האפליקציות שלי"),
         ["Nav_Engines"] = ("Engines", "מנועים"),
+        ["Nav_Linux"] = ("Linux apps", "אפליקציות Linux"),
         ["Nav_Settings"] = ("Settings", "הגדרות"),
         ["Nav_About"] = ("About", "אודות"),
 
@@ -133,6 +134,22 @@ public sealed class Localizer
         ["Set_Tools"] = ("Android tools", "כלי אנדרואיד"),
         ["Set_ToolsFound"] = ("Found", "נמצא"),
         ["Set_ToolsMissing"] = ("Not found", "לא נמצא"),
+
+        // Linux (WSL)
+        ["Lnx_Title"] = ("Linux apps (WSL)", "אפליקציות Linux (WSL)"),
+        ["Lnx_Intro"] = ("Run Linux GUI software on Windows 11 through WSL 2 + WSLg. Install packages, then launch them or pin them to the Start Menu.",
+                        "הרצת תוכנות Linux עם ממשק גרפי ב-Windows 11 דרך WSL 2 + WSLg. התקן חבילות, ואז הפעל אותן או הצמד לתפריט התחל."),
+        ["Lnx_NoWsl"] = ("WSL is not installed or not reachable.", "‏WSL אינו מותקן או לא נגיש."),
+        ["Lnx_WslHint"] = ("Open PowerShell as administrator and run:  wsl --install  then restart. On Windows 11 this also enables WSLg for GUI apps.",
+                          "פתח PowerShell כמנהל והרץ:  wsl --install  ואז הפעל מחדש. ב-Windows 11 זה גם מפעיל את WSLg לאפליקציות גרפיות."),
+        ["Lnx_Distro"] = ("Distribution", "הפצה"),
+        ["Lnx_Distros"] = ("distributions", "הפצות"),
+        ["Lnx_NoDistro"] = ("No WSL distribution found. Install one, e.g.  wsl --install -d Ubuntu",
+                           "לא נמצאה הפצת WSL. התקן אחת, למשל  wsl --install -d Ubuntu"),
+        ["Lnx_Apps"] = ("Installed GUI apps", "אפליקציות גרפיות מותקנות"),
+        ["Lnx_NoApps"] = ("No GUI apps found in this distribution yet.", "לא נמצאו אפליקציות גרפיות בהפצה הזו."),
+        ["Lnx_InstallPkg"] = ("Install a package (apt)", "התקנת חבילה (apt)"),
+        ["Lnx_PkgWatermark"] = ("package name, e.g. gimp", "שם חבילה, למשל gimp"),
 
         // About
         ["About_Version"] = ("Version", "גרסה"),

@@ -1,0 +1,84 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Roost.ViewModels"
+             xmlns:models="clr-namespace:Roost.Models"
+             xmlns:conv="clr-namespace:Roost.Converters"
+             x:Class="Roost.Views.LinuxView"
+             x:DataType="vm:LinuxViewModel"
+             x:CompileBindings="False"
+             x:Name="Root">
+  <StackPanel Spacing="16">
+    <TextBlock Classes="h1" Text="{Binding Loc[Lnx_Title]}"/>
+    <TextBlock Classes="muted" MaxWidth="660" HorizontalAlignment="Left" Text="{Binding Loc[Lnx_Intro]}"/>
+
+    <!-- WSL missing -->
+    <Border Classes="card" IsVisible="{Binding NoWsl}" Background="#3A2A14" BorderBrush="#7A5A20">
+      <StackPanel Spacing="6">
+        <TextBlock Foreground="#FFD79A" FontWeight="SemiBold" Text="{Binding Loc[Lnx_NoWsl]}"/>
+        <TextBlock Classes="muted" Foreground="#FFD79A" Text="{Binding Loc[Lnx_WslHint]}"/>
+      </StackPanel>
+    </Border>
+
+    <!-- Distro selector -->
+    <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding WslInstalled}">
+      <ComboBox Grid.Column="0" ItemsSource="{Binding Distros}"
+                SelectedItem="{Binding SelectedDistro, Mode=TwoWay}" HorizontalAlignment="Stretch">
+        <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="models:WslDistro">
+            <TextBlock Text="{Binding Name}"/>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+      <Button Grid.Column="1" Margin="8,0,0,0" Content="{Binding Loc[Common_Refresh]}" Command="{Binding RefreshCommand}"/>
+    </Grid>
+
+    <TextBlock Classes="muted" Text="{Binding Loc[Lnx_NoDistro]}"
+               IsVisible="{Binding Distros.Count, Converter={x:Static conv:IntConverters.IsZero}}"/>
+    <ProgressBar IsIndeterminate="True" Height="3" IsVisible="{Binding Loading}"/>
+
+    <!-- Install a package -->
+    <Border Classes="card" IsVisible="{Binding WslInstalled}">
+      <StackPanel Spacing="10">
+        <TextBlock Classes="h2" Text="{Binding Loc[Lnx_InstallPkg]}"/>
+        <Grid ColumnDefinitions="*,Auto">
+          <TextBox Text="{Binding PackageName}" Watermark="{Binding Loc[Lnx_PkgWatermark]}"/>
+          <Button Grid.Column="1" Margin="8,0,0,0" Classes="accent" Content="{Binding Loc[Common_Install]}"
+                  Command="{Binding InstallPackageCommand}" IsEnabled="{Binding !Installing}"/>
+        </Grid>
+        <ProgressBar IsIndeterminate="True" Height="3" IsVisible="{Binding Installing}"/>
+        <SelectableTextBlock Text="{Binding InstallLog}" FontFamily="Cascadia Code,Consolas,monospace"
+                             FontSize="12" TextWrapping="Wrap"
+                             IsVisible="{Binding InstallLog, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+      </StackPanel>
+    </Border>
+
+    <!-- Installed GUI apps -->
+    <Border Classes="card" IsVisible="{Binding WslInstalled}">
+      <StackPanel Spacing="8">
+        <TextBlock Classes="h2" Text="{Binding Loc[Lnx_Apps]}"/>
+        <ItemsControl ItemsSource="{Binding Apps}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:LinuxApp">
+              <Border Margin="0,3" Padding="12,8" CornerRadius="8" Background="{DynamicResource SidebarBrush}">
+                <Grid ColumnDefinitions="*,Auto">
+                  <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding Exec}" FontSize="11" Opacity="0.55"/>
+                  </StackPanel>
+                  <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                    <Button Classes="accent" Content="{Binding #Root.DataContext.Loc[Common_Launch]}"
+                            Command="{Binding #Root.DataContext.LaunchCommand}" CommandParameter="{Binding}"/>
+                    <Button Content="{Binding #Root.DataContext.Loc[Common_Shortcut]}"
+                            Command="{Binding #Root.DataContext.ShortcutCommand}" CommandParameter="{Binding}"/>
+                  </StackPanel>
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock Classes="muted" Text="{Binding Loc[Lnx_NoApps]}"
+                   IsVisible="{Binding Apps.Count, Converter={x:Static conv:IntConverters.IsZero}}"/>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

@@ -13,6 +13,7 @@
     <DataTemplate DataType="vm:InstallViewModel"><views:InstallView/></DataTemplate>
     <DataTemplate DataType="vm:AppsViewModel"><views:AppsView/></DataTemplate>
     <DataTemplate DataType="vm:EnginesViewModel"><views:EnginesView/></DataTemplate>
+    <DataTemplate DataType="vm:LinuxViewModel"><views:LinuxView/></DataTemplate>
     <DataTemplate DataType="vm:SettingsViewModel"><views:SettingsView/></DataTemplate>
     <DataTemplate DataType="vm:AboutViewModel"><views:AboutView/></DataTemplate>
   </Window.DataTemplates>
@@ -45,6 +46,7 @@
           <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Install]}"/></ListBoxItem>
           <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Apps]}"/></ListBoxItem>
           <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Engines]}"/></ListBoxItem>
+          <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Linux]}"/></ListBoxItem>
           <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Settings]}"/></ListBoxItem>
           <ListBoxItem><TextBlock Text="{Binding Loc[Nav_About]}"/></ListBoxItem>
         </ListBox>

@@ -18,8 +18,10 @@ public static class ProcessRunner
 {
     public static async Task<ProcResult> RunAsync(
         string exe, IEnumerable<string> args, int timeoutMs = 30000,
-        string? workingDir = null, CancellationToken ct = default)
+        string? workingDir = null, CancellationToken ct = default,
+        Encoding? outputEncoding = null)
     {
+        var enc = outputEncoding ?? Encoding.UTF8;
         var psi = new ProcessStartInfo
         {
             FileName = exe,
@@ -27,8 +29,8 @@ public static class ProcessRunner
             RedirectStandardError = true,
             UseShellExecute = false,
             CreateNoWindow = true,
-            StandardOutputEncoding = Encoding.UTF8,
-            StandardErrorEncoding = Encoding.UTF8,
+            StandardOutputEncoding = enc,
+            StandardErrorEncoding = enc,
         };
         if (!string.IsNullOrEmpty(workingDir)) psi.WorkingDirectory = workingDir;
         foreach (var a in args) psi.ArgumentList.Add(a);

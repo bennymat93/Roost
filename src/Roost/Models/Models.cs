@@ -53,6 +53,24 @@ public sealed class ApkInfo
     public string? ParseError { get; set; }
 }
 
+/// <summary>A WSL Linux distribution.</summary>
+public sealed class WslDistro
+{
+    public string Name { get; set; } = "";
+    public string State { get; set; } = "";
+    public int Version { get; set; } = 2;
+    public bool IsDefault { get; set; }
+    public override string ToString() => Name;
+}
+
+/// <summary>A Linux GUI application discovered from a .desktop entry.</summary>
+public sealed class LinuxApp
+{
+    public string Name { get; set; } = "";
+    public string Exec { get; set; } = "";     // cleaned command (field codes stripped)
+    public string Distro { get; set; } = "";
+}
+
 public sealed class AppSettings
 {
     public ThemeMode Theme { get; set; } = ThemeMode.Dark;

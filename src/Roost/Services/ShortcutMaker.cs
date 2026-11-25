@@ -38,6 +38,31 @@ public static class ShortcutMaker
         return ok;
     }
 
+    public static bool ForLinuxApp(AppSettings settings, string distro, string appName, string exec)
+    {
+        if (!OperatingSystem.IsWindows()) return false;
+        var exe = Environment.ProcessPath;
+        if (string.IsNullOrEmpty(exe)) return false;
+
+        var fileName = Sanitize(appName);
+        var args = $"--launch-linux \"{distro}\" \"{exec}\"";
+        var description = $"{appName} — via Roost (Linux · {distro})";
+
+        var dirs = new List<string>();
+        if (settings.ShortcutLocation is ShortcutLocation.StartMenu or ShortcutLocation.Both)
+            dirs.Add(ShortcutService.StartMenuDir);
+        if (settings.ShortcutLocation is ShortcutLocation.Desktop or ShortcutLocation.Both)
+            dirs.Add(ShortcutService.DesktopDir);
+
+        var ok = false;
+        foreach (var dir in dirs)
+        {
+            var lnk = Path.Combine(dir, fileName + ".lnk");
+            ok |= ShortcutService.Create(lnk, exe!, args, exe, description);
+        }
+        return ok;
+    }
+
     private static string Sanitize(string name)
     {
         var invalid = Path.GetInvalidFileNameChars();

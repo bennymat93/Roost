@@ -25,6 +25,7 @@ public partial class MainViewModel : ViewModelBase
     public InstallViewModel Install { get; }
     public AppsViewModel Apps { get; }
     public EnginesViewModel EnginesVm { get; }
+    public LinuxViewModel Linux { get; }
     public SettingsViewModel SettingsVm { get; }
     public AboutViewModel About { get; }
 
@@ -37,6 +38,7 @@ public partial class MainViewModel : ViewModelBase
         Install = new InstallViewModel(this);
         Apps = new AppsViewModel(this);
         EnginesVm = new EnginesViewModel(this);
+        Linux = new LinuxViewModel(this);
         SettingsVm = new SettingsViewModel(this);
         About = new AboutViewModel(this);
 
@@ -59,11 +61,13 @@ public partial class MainViewModel : ViewModelBase
             1 => Install,
             2 => Apps,
             3 => EnginesVm,
-            4 => SettingsVm,
-            5 => About,
+            4 => Linux,
+            5 => SettingsVm,
+            6 => About,
             _ => Dashboard,
         };
         if (value == 2) _ = Apps.LoadAsync();
+        if (value == 4 && Linux.Distros.Count == 0) _ = Linux.RefreshAsync();
     }
 
     public void Navigate(int index) => NavIndex = index;
