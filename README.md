@@ -82,7 +82,11 @@ Roost ships a full **Help / Guide** page (English + Hebrew) with annotated scree
 iOS and macOS apps need Apple's own OS (Darwin/XNU) and frameworks, normally on Apple hardware. There is no working, general way to run them natively on Windows, so Roost does **not** pretend to — that support is on the roadmap only if a viable runtime path is validated, and will meet the same quality bar as Android.
 
 ### Install
-Download from the [latest release](../../releases/latest):
+
+**Direct download (portable, no .NET needed, just run it):**
+[`downloads/Roost-v1.2.1-portable.exe`](https://github.com/bennymat93/Roost/raw/main/downloads/Roost-v1.2.1-portable.exe)
+
+Or, once a [release](../../releases/latest) is published, from there:
 - **`Roost-Setup.exe`** — installer (per-user, no admin).
 - **`Roost.exe`** — portable, self-contained (no .NET needed).
 - **`Roost-framework-dependent.zip`** — small build; needs the [.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0).
