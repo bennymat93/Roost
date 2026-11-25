@@ -68,8 +68,8 @@ public partial class SettingsViewModel : ViewModelBase
         ApplyStartup(StartWithWindows);
         Saved = "✓";
 
-        if (oldTheme != s.Theme || oldLang != s.Language)
-            App.ApplyAndRestart(s);
+        if (oldTheme != s.Theme) App.ApplyTheme(s.Theme);   // live, no window rebuild
+        if (oldLang != s.Language) App.ApplyLanguage(s);     // rebuild for RTL/text
     }
 
     private static void ApplyStartup(bool enable)

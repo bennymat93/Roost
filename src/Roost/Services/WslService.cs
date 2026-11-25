@@ -120,11 +120,9 @@ public static class WslService
     public static Task<ProcResult> InstallPackageAsync(string distro, string package)
     {
         var safe = Regex.Replace(package.Trim(), @"[^a-zA-Z0-9\.\-\+_ ]", "");
-        var bash = $"sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y {safe}";
+        // sudo -n fails fast (instead of hanging on a password prompt) when the distro's
+        // default user does not have passwordless sudo.
+        var bash = $"sudo -n sh -c 'apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y {safe}'";
         return RunInDistro(distro, bash, 1800000);
     }
-
-    /// <summary>Arguments for a wsl.exe shortcut that launches a Linux GUI app.</summary>
-    public static string LaunchArgs(string distro, string exec)
-        => $"-d {distro} -- bash -lc \"nohup {exec} >/dev/null 2>&1 &\"";
 }

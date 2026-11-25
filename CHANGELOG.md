@@ -4,6 +4,27 @@ All notable changes to Roost are documented here.
 This project follows [Semantic Versioning](https://semver.org/): every change,
 addition or fix bumps the version number.
 
+## [1.2.1] - 2025-11-25
+
+### Fixed (QA pass)
+- Installed-app and Linux-app lists no longer duplicate entries when reloads
+  overlap (reload-token guard).
+- **Uninstall now asks for confirmation** before removing an app and its data.
+- Install success is detected from combined stdout+stderr ("Success" without
+  "Failure"), so a successful install on stderr-emitting adb builds isn't
+  misreported as a failure.
+- The Install button re-enables correctly when you select an engine after
+  loading a file; guard against an empty split bundle.
+- WSL package install uses `sudo -n` so it fails fast instead of hanging when the
+  distro needs a sudo password.
+- ProcessRunner waits asynchronously and honours cancellation (no blocked
+  thread-pool thread for the whole timeout).
+- Linux shortcut arguments are quote-escaped; dead code removed.
+- Leftover split-bundle temp extractions are swept on startup; custom ADB port
+  is range-validated; COM shortcut objects are released; the chosen default
+  engine is persisted immediately; a theme-only change no longer rebuilds the
+  window.
+
 ## [1.2.0] - 2025-11-25
 
 Added an in-app user guide.

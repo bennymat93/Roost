@@ -27,9 +27,11 @@ public static class ShortcutService
                               string? iconPath, string description)
     {
         if (!OperatingSystem.IsWindows()) return false;
+        object? com = null;
         try
         {
-            var link = (IShellLinkW)new ShellLink();
+            com = new ShellLink();
+            var link = (IShellLinkW)com;
             link.SetPath(targetExe);
             link.SetArguments(arguments);
             link.SetDescription(description.Length > 255 ? description[..255] : description);
@@ -40,6 +42,7 @@ public static class ShortcutService
             return true;
         }
         catch { return false; }
+        finally { if (com is not null) Marshal.FinalReleaseComObject(com); }
     }
 
     /// <summary>Wrap a PNG into a single-image .ico (PNG-in-ICO, supported on Windows Vista+)

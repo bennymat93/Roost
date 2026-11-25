@@ -56,10 +56,11 @@ public static class ProcessRunner
         p.BeginOutputReadLine();
         p.BeginErrorReadLine();
 
-        using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
-        var waited = Task.Run(() => p.WaitForExit(timeoutMs));
-        var finished = await waited.ConfigureAwait(false);
-        if (!finished)
+        // Wait asynchronously (no blocked pool thread), honouring both the timeout
+        // and the caller's cancellation token.
+        var exitTask = p.WaitForExitAsync(ct);
+        await Task.WhenAny(exitTask, Task.Delay(timeoutMs)).ConfigureAwait(false);
+        if (!p.HasExited)
         {
             try { p.Kill(entireProcessTree: true); } catch { /* ignore */ }
             return new ProcResult(-1, sb.ToString().TrimEnd(), eb.ToString().TrimEnd(), true);

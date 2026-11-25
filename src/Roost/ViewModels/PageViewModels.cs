@@ -36,16 +36,19 @@ public partial class AppsViewModel : ViewModelBase
     [ObservableProperty] private bool _loading;
     [ObservableProperty] private string _message = "";
 
+    private int _loadToken;   // guards against overlapping reloads
+
     public AndroidEngine? Engine => _main.SelectedEngine;
 
     [RelayCommand] private Task Refresh() => LoadAsync();
 
     public async Task LoadAsync()
     {
-        Apps.Clear();
+        var token = ++_loadToken;
         var engine = _main.SelectedEngine;
         if (engine?.Serial is null || !_main.Adb.Available)
         {
+            Apps.Clear();
             Message = Loc["Dash_NoEngines"];
             return;
         }
@@ -54,6 +57,8 @@ public partial class AppsViewModel : ViewModelBase
         try
         {
             var pkgs = await _main.Adb.ListPackagesAsync(engine.Serial);
+            if (token != _loadToken) return;     // a newer load superseded this one
+            Apps.Clear();
             foreach (var p in pkgs)
             {
                 var iconPath = Path.Combine(SettingsStore.IconCacheDir, p + ".png");
@@ -67,8 +72,8 @@ public partial class AppsViewModel : ViewModelBase
             }
             Message = Apps.Count == 0 ? Loc["Apps_None"] : "";
         }
-        catch (Exception ex) { Message = ex.Message; }
-        finally { Loading = false; }
+        catch (Exception ex) { if (token == _loadToken) Message = ex.Message; }
+        finally { if (token == _loadToken) Loading = false; }
     }
 
     [RelayCommand]
@@ -84,11 +89,18 @@ public partial class AppsViewModel : ViewModelBase
     {
         var engine = _main.SelectedEngine;
         if (app is null || engine?.Serial is null) return;
+
+        var ok = await Dialogs.ConfirmAsync(
+            Loc["Common_Uninstall"],
+            Loc["Apps_ConfirmUninstall"] + "\n\n" + (string.IsNullOrEmpty(app.Label) ? app.PackageName : app.Label),
+            Loc["Common_Uninstall"], Loc["Common_Cancel"]);
+        if (!ok) return;
+
         Loading = true;
         try
         {
             var r = await _main.Adb.UninstallAsync(engine.Serial, app.PackageName);
-            if (r.Ok) Apps.Remove(app);
+            if (r.StdOut.Contains("Success", System.StringComparison.OrdinalIgnoreCase)) Apps.Remove(app);
             else Message = r.All;
         }
         finally { Loading = false; }
@@ -109,7 +121,7 @@ public partial class AboutViewModel : ViewModelBase
 {
     public AboutViewModel(MainViewModel main) { }
 
-    public string VersionText => "1.2.0";
+    public string VersionText => "1.2.1";
 
     [RelayCommand]
     private void OpenUrl(string? url)

@@ -20,6 +20,7 @@ public partial class App : Application
     {
         var settings = SettingsStore.Load();
         SettingsStore.EnsureDirs();
+        ApkInspector.CleanupTemp();   // sweep leftover split-bundle extractions
         Localizer.Instance.SetLanguage(settings.Language);
         ApplyTheme(settings.Theme);
 
@@ -60,11 +61,11 @@ public partial class App : Application
         };
     }
 
-    /// <summary>Re-apply theme + language and rebuild the window (used after Settings save).</summary>
-    public static void ApplyAndRestart(AppSettings settings)
+    /// <summary>Apply a language change: rebuild the window (so RTL/text refresh). Theme is
+    /// handled live by <see cref="ApplyTheme"/> without a rebuild.</summary>
+    public static void ApplyLanguage(AppSettings settings)
     {
         Localizer.Instance.SetLanguage(settings.Language);
-        ApplyTheme(settings.Theme);
         _main?.Help.Reload();
         if (_desktop is not null && _main is not null)
         {

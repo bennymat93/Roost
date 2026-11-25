@@ -45,22 +45,28 @@ public partial class LinuxViewModel : ViewModelBase
                 ? (Distros.Count == 0 ? Loc["Lnx_NoDistro"] : $"{Distros.Count} {Loc["Lnx_Distros"]}")
                 : Loc["Lnx_NoWsl"];
         }
+        catch (System.Exception ex) { Status = ex.Message; }
         finally { Loading = false; }
     }
 
     partial void OnSelectedDistroChanged(WslDistro? value) => _ = LoadAppsAsync();
 
+    private int _appsToken;
+
     public async Task LoadAppsAsync()
     {
-        Apps.Clear();
-        if (SelectedDistro is null) return;
+        var token = ++_appsToken;
+        if (SelectedDistro is null) { Apps.Clear(); return; }
         Loading = true;
         try
         {
-            foreach (var a in await WslService.ListAppsAsync(SelectedDistro.Name)) Apps.Add(a);
+            var list = await WslService.ListAppsAsync(SelectedDistro.Name);
+            if (token != _appsToken) return;     // superseded by a newer load
+            Apps.Clear();
+            foreach (var a in list) Apps.Add(a);
             if (Apps.Count == 0) Status = Loc["Lnx_NoApps"];
         }
-        finally { Loading = false; }
+        finally { if (token == _appsToken) Loading = false; }
     }
 
     [RelayCommand] private Task Refresh() => RefreshAsync();

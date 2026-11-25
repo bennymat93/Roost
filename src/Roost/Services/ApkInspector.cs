@@ -15,6 +15,15 @@ public static class ApkInspector
 {
     private static readonly string[] BundleExts = { ".xapk", ".apks", ".apkm", ".zip" };
 
+    private static string ExtractRoot => Path.Combine(Path.GetTempPath(), "Roost", "extract");
+
+    /// <summary>Delete leftover split-bundle extractions from previous runs.</summary>
+    public static void CleanupTemp()
+    {
+        try { if (Directory.Exists(ExtractRoot)) Directory.Delete(ExtractRoot, recursive: true); }
+        catch { /* best effort */ }
+    }
+
     public static async Task<ApkInfo> InspectAsync(string filePath, string? aapt2Path)
     {
         var info = new ApkInfo { FilePath = filePath };
@@ -26,7 +35,7 @@ public static class ApkInspector
             if (BundleExts.Contains(ext))
             {
                 info.IsSplit = true;
-                var dir = Path.Combine(Path.GetTempPath(), "Roost", "extract", Guid.NewGuid().ToString("N"));
+                var dir = Path.Combine(ExtractRoot, Guid.NewGuid().ToString("N"));
                 Directory.CreateDirectory(dir);
                 ZipFile.ExtractToDirectory(filePath, dir, overwriteFiles: true);
                 var apks = Directory.GetFiles(dir, "*.apk", SearchOption.AllDirectories);

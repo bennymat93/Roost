@@ -45,7 +45,9 @@ public static class ShortcutMaker
         if (string.IsNullOrEmpty(exe)) return false;
 
         var fileName = Sanitize(appName);
-        var args = $"--launch-linux \"{distro}\" \"{exec}\"";
+        // Escape embedded quotes so CommandLineToArgvW re-parses the exec intact.
+        static string Q(string s) => s.Replace("\"", "\\\"");
+        var args = $"--launch-linux \"{Q(distro)}\" \"{Q(exec)}\"";
         var description = $"{appName} — via Roost (Linux · {distro})";
 
         var dirs = new List<string>();

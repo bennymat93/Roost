@@ -34,6 +34,9 @@ public partial class InstallViewModel : ViewModelBase
 
     partial void OnInstallingChanged(bool value) => OnPropertyChanged(nameof(CanInstall));
 
+    /// <summary>Called when the selected engine changes elsewhere, so the Install button re-evaluates.</summary>
+    public void NotifyCanInstall() => OnPropertyChanged(nameof(CanInstall));
+
     public async Task LoadFileAsync(string path)
     {
         ResultMessage = "";
@@ -63,6 +66,12 @@ public partial class InstallViewModel : ViewModelBase
         var info = Info;
         if (info is null) return;
         if (engine?.Serial is null) { ResultMessage = Loc["Install_NoEngine"]; return; }
+        if (info.SplitFiles.Count == 0)
+        {
+            AppendLog("! no installable .apk found in the selected file");
+            ResultMessage = Loc["Install_Failed"];
+            return;
+        }
 
         Installing = true;
         ResultMessage = "";
@@ -77,7 +86,11 @@ public partial class InstallViewModel : ViewModelBase
 
             if (!string.IsNullOrWhiteSpace(r.All)) AppendLog(r.All.Trim());
 
-            if (r.Ok && r.StdOut.Contains("Success", StringComparison.OrdinalIgnoreCase))
+            // adb prints "Success" on success and "Failure [...]" otherwise, on stdout
+            // or stderr depending on the build — so check combined output.
+            bool success = r.All.Contains("Success", StringComparison.OrdinalIgnoreCase)
+                           && !r.All.Contains("Failure", StringComparison.OrdinalIgnoreCase);
+            if (success)
             {
                 ResultMessage = Loc["Install_Success"];
                 if (MakeShortcut && !string.IsNullOrEmpty(info.PackageName))

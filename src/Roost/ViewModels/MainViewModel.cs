@@ -93,12 +93,18 @@ public partial class MainViewModel : ViewModelBase
                 ? $"{Engines.Count} {Loc["Eng_Detected"]}"
                 : Loc["Dash_NoEngines"];
         }
+        catch (System.Exception ex) { StatusText = ex.Message; }
         finally { Busy = false; }
     }
 
     partial void OnSelectedEngineChanged(AndroidEngine? value)
     {
-        if (value is not null) Settings.DefaultEngineId = value.Id;
+        if (value is not null)
+        {
+            Settings.DefaultEngineId = value.Id;
+            SettingsStore.Save(Settings);       // persist the chosen default engine
+        }
+        Install.NotifyCanInstall();             // re-evaluate the Install button
         _ = Apps.LoadAsync();
     }
 }

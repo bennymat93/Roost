@@ -71,7 +71,7 @@ public partial class EnginesViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddCustom()
     {
-        if (!int.TryParse(CustomPort, out var port)) return;
+        if (!int.TryParse(CustomPort, out var port) || port < 1 || port > 65535) return;
         if (!_main.Adb.Available) return;
 
         await _main.Adb.ConnectAsync(CustomHost, port);
