@@ -15,3 +15,6 @@ Thumbs.db
 
 # Tools cache
 *.binlog
+
+# Installer build output (committed copy lives in downloads/)
+installer/Output/

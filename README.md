@@ -83,13 +83,12 @@ iOS and macOS apps need Apple's own OS (Darwin/XNU) and frameworks, normally on 
 
 ### Install
 
-**Direct download (portable, no .NET needed, just run it):**
-[`downloads/Roost-v1.2.1-portable.exe`](https://github.com/bennymat93/Roost/raw/main/downloads/Roost-v1.2.1-portable.exe)
+**Download the installer** — per-user, **no admin required**, just run it:
+### ⬇️ [`downloads/Roost-Setup.exe`](https://github.com/bennymat93/Roost/raw/main/downloads/Roost-Setup.exe)
 
-Or, once a [release](../../releases/latest) is published, from there:
-- **`Roost-Setup.exe`** — installer (per-user, no admin).
-- **`Roost.exe`** — portable, self-contained (no .NET needed).
-- **`Roost-framework-dependent.zip`** — small build; needs the [.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0).
+The installer (English + Hebrew) adds Start-Menu and optional Desktop shortcuts and a proper uninstaller (Add/Remove Programs). It is self-contained — **no .NET runtime needed**.
+
+<p align="center"><img src="docs/img/installer.png" width="300" alt="Roost installer"></p>
 
 > Not code-signed, so SmartScreen may warn on first run: *More info → Run anyway*.
 

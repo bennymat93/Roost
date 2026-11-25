@@ -4,6 +4,16 @@ All notable changes to Roost are documented here.
 This project follows [Semantic Versioning](https://semver.org/): every change,
 addition or fix bumps the version number.
 
+## [1.3.0] - 2025-11-25
+
+### Added
+- **Windows installer** (`Roost-Setup.exe`, NSIS): branded welcome/header
+  graphics, license page, component choices (Desktop shortcut), per-user install
+  with **no admin required**, a proper uninstaller and Add/Remove Programs entry,
+  in English and Hebrew. Downloadable directly from `downloads/`.
+- Installer source at `installer/Roost.nsi` (builds with `makensis` on Windows
+  or Linux); CI builds and attaches it to releases.
+
 ## [1.2.1] - 2025-11-25
 
 ### Fixed (QA pass)
