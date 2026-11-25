@@ -1,0 +1,97 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Roost.ViewModels"
+             xmlns:models="clr-namespace:Roost.Models"
+             xmlns:conv="clr-namespace:Roost.Converters"
+             x:Class="Roost.Views.InstallView"
+             x:DataType="vm:InstallViewModel"
+             DragDrop.AllowDrop="True">
+  <StackPanel Spacing="16">
+    <TextBlock Classes="h1" Text="{Binding Loc[Install_Title]}"/>
+
+    <!-- Drop zone -->
+    <Border Classes="card" BorderThickness="1.5" Height="120">
+      <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8">
+        <TextBlock Classes="muted" HorizontalAlignment="Center" Text="{Binding Loc[Dash_Drop]}"/>
+        <Button Content="{Binding Loc[Common_Browse]}" Click="OnBrowse" HorizontalAlignment="Center"/>
+      </StackPanel>
+    </Border>
+
+    <ProgressBar IsIndeterminate="True" Height="3" IsVisible="{Binding Parsing}"/>
+
+    <!-- Parsed info -->
+    <Border Classes="card" IsVisible="{Binding HasInfo}">
+      <StackPanel Spacing="12">
+        <Grid ColumnDefinitions="64,*" >
+          <Border Width="56" Height="56" CornerRadius="12" ClipToBounds="True"
+                  Background="{DynamicResource SidebarBrush}">
+            <Image Source="{Binding Info.IconPath, Converter={x:Static conv:PathToBitmapConverter.Instance}}"
+                   Stretch="UniformToFill"/>
+          </Border>
+          <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center" Spacing="2">
+            <TextBlock Text="{Binding Info.Label}" FontSize="18" FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding Info.PackageName}" FontSize="12" Opacity="0.6"/>
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock FontSize="12" Opacity="0.8">
+                <Run Text="{Binding Loc[Common_Version]}"/><Run Text=" "/><Run Text="{Binding Info.VersionName}"/>
+              </TextBlock>
+              <Border Background="{DynamicResource AccentBrush}" CornerRadius="4" Padding="6,1"
+                      IsVisible="{Binding Info.IsSplit}">
+                <TextBlock Text="{Binding Loc[Install_Split]}" FontSize="11" Foreground="#06231F"/>
+              </Border>
+            </StackPanel>
+          </StackPanel>
+        </Grid>
+
+        <Expander Header="{Binding Loc[Install_Permissions]}" IsVisible="{Binding Info.Permissions.Count, Converter={x:Static conv:IntConverters.IsPositive}}">
+          <ItemsControl ItemsSource="{Binding Info.Permissions}" Margin="0,4,0,0">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <TextBlock Text="{Binding}" FontSize="12" Opacity="0.75" Margin="0,1"/>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </Expander>
+      </StackPanel>
+    </Border>
+
+    <!-- Target + options -->
+    <Border Classes="card" IsVisible="{Binding HasInfo}">
+      <StackPanel Spacing="12">
+        <StackPanel Spacing="6">
+          <TextBlock Classes="h2" Text="{Binding Loc[Install_Target]}"/>
+          <ComboBox ItemsSource="{Binding Main.Engines}"
+                    SelectedItem="{Binding Main.SelectedEngine, Mode=TwoWay}"
+                    HorizontalAlignment="Stretch" MinWidth="280">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="models:AndroidEngine">
+                <TextBlock Text="{Binding DisplayName}"/>
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+          <TextBlock Classes="muted" Text="{Binding Loc[Install_NoEngine]}"
+                     IsVisible="{Binding Main.Engines.Count, Converter={x:Static conv:IntConverters.IsZero}}"/>
+        </StackPanel>
+
+        <CheckBox IsChecked="{Binding Reinstall}" Content="{Binding Loc[Install_Reinstall]}"/>
+        <CheckBox IsChecked="{Binding MakeShortcut}" Content="{Binding Loc[Install_MakeShortcut]}"/>
+
+        <Button Classes="accent" Content="{Binding Loc[Install_Go]}"
+                Command="{Binding InstallCommand}" IsEnabled="{Binding CanInstall}"
+                HorizontalAlignment="Left"/>
+        <ProgressBar IsIndeterminate="True" Height="3" IsVisible="{Binding Installing}"/>
+        <TextBlock Text="{Binding ResultMessage}" FontWeight="SemiBold"
+                   Foreground="{DynamicResource AccentBrush}"/>
+      </StackPanel>
+    </Border>
+
+    <!-- Log -->
+    <Border Classes="card" IsVisible="{Binding Log, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+      <StackPanel Spacing="6">
+        <TextBlock Classes="h2" Text="Log"/>
+        <SelectableTextBlock Text="{Binding Log}" FontFamily="Cascadia Code,Consolas,monospace"
+                             FontSize="12" TextWrapping="Wrap"/>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

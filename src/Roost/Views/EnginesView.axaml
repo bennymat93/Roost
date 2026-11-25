@@ -1,0 +1,109 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Roost.ViewModels"
+             xmlns:models="clr-namespace:Roost.Models"
+             xmlns:conv="clr-namespace:Roost.Converters"
+             x:Class="Roost.Views.EnginesView"
+             x:DataType="vm:EnginesViewModel">
+  <StackPanel Spacing="16">
+    <TextBlock Classes="h1" Text="{Binding Loc[Eng_Title]}"/>
+
+    <Border Classes="card" IsVisible="{Binding AdbMissing}"
+            Background="#3A2A14" BorderBrush="#7A5A20">
+      <StackPanel Spacing="10">
+        <TextBlock Classes="muted" Foreground="#FFD79A" Text="{Binding Loc[Eng_AdbMissing]}"/>
+        <StackPanel Orientation="Horizontal" Spacing="12">
+          <Button Classes="accent" Content="{Binding Loc[Eng_DownloadAdb]}"
+                  Command="{Binding DownloadToolsCommand}" IsEnabled="{Binding !Downloading}"/>
+          <TextBlock Text="{Binding DownloadStatus}" VerticalAlignment="Center" Opacity="0.8"/>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <!-- Connected engines -->
+    <Border Classes="card">
+      <StackPanel Spacing="10">
+        <Grid ColumnDefinitions="*,Auto">
+          <TextBlock Classes="h2" Text="{Binding Loc[Eng_Detected]}"/>
+          <Button Grid.Column="1" Content="{Binding Loc[Common_Refresh]}" Command="{Binding RefreshCommand}"/>
+        </Grid>
+        <ItemsControl ItemsSource="{Binding Engines}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:AndroidEngine">
+              <Border Margin="0,3" Padding="12,8" CornerRadius="8" Background="{DynamicResource SidebarBrush}">
+                <Grid ColumnDefinitions="*,Auto">
+                  <StackPanel>
+                    <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding Endpoint}" FontSize="11" Opacity="0.6"/>
+                  </StackPanel>
+                  <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Status}"
+                             Foreground="{DynamicResource AccentBrush}"/>
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock Classes="muted" Text="{Binding Loc[Dash_NoEngines]}"
+                   IsVisible="{Binding Engines.Count, Converter={x:Static conv:IntConverters.IsZero}}"/>
+      </StackPanel>
+    </Border>
+
+    <!-- Add custom endpoint -->
+    <Border Classes="card">
+      <StackPanel Spacing="10">
+        <TextBlock Classes="h2" Text="{Binding Loc[Eng_Custom]}"/>
+        <Grid ColumnDefinitions="*,120,Auto" >
+          <StackPanel Grid.Column="0" Spacing="2" Margin="0,0,8,0">
+            <TextBlock Text="{Binding Loc[Eng_Host]}" FontSize="12" Opacity="0.7"/>
+            <TextBox Text="{Binding CustomHost}"/>
+          </StackPanel>
+          <StackPanel Grid.Column="1" Spacing="2" Margin="0,0,8,0">
+            <TextBlock Text="{Binding Loc[Eng_Port]}" FontSize="12" Opacity="0.7"/>
+            <TextBox Text="{Binding CustomPort}"/>
+          </StackPanel>
+          <Button Grid.Column="2" VerticalAlignment="Bottom" Classes="accent"
+                  Content="{Binding Loc[Eng_Add]}" Command="{Binding AddCustomCommand}"/>
+        </Grid>
+      </StackPanel>
+    </Border>
+
+    <!-- Readiness -->
+    <Border Classes="card">
+      <StackPanel Spacing="10">
+        <Grid ColumnDefinitions="*,Auto">
+          <TextBlock Classes="h2" Text="{Binding Loc[Eng_Setup]}"/>
+          <Button Grid.Column="1" Content="{Binding Loc[Eng_CheckNow]}" Command="{Binding RunChecksCommand}"/>
+        </Grid>
+        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+          <TextBlock Grid.Row="0" Text="{Binding Loc[Eng_Hypervisor]}"/>
+          <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding HypervisorText}" FontWeight="SemiBold"/>
+          <TextBlock Grid.Row="1" Text="{Binding Loc[Eng_Firmware]}" Margin="0,6,0,0"/>
+          <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding FirmwareText}" FontWeight="SemiBold" Margin="0,6,0,0"/>
+          <TextBlock Grid.Row="2" Text="{Binding Loc[Eng_VmPlatform]}" Margin="0,6,0,0"/>
+          <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding VmPlatformText}" FontWeight="SemiBold" Margin="0,6,0,0"/>
+        </Grid>
+        <TextBlock Classes="muted" Text="{Binding Loc[Eng_Corp]}"/>
+      </StackPanel>
+    </Border>
+
+    <!-- Supported backends -->
+    <Border Classes="card">
+      <StackPanel Spacing="8">
+        <TextBlock Classes="h2" Text="{Binding Loc[Eng_Known]}"/>
+        <ItemsControl ItemsSource="{Binding KnownBackends}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:BackendItem">
+              <Grid ColumnDefinitions="180,*" Margin="0,4">
+                <StackPanel>
+                  <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                  <TextBlock Text="{Binding Ports}" FontSize="11" Opacity="0.55"/>
+                </StackPanel>
+                <TextBlock Grid.Column="1" Classes="muted" Text="{Binding Hint}" VerticalAlignment="Center"/>
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Roost.ViewModels"
+             x:Class="Roost.Views.AboutView"
+             x:DataType="vm:AboutViewModel">
+  <StackPanel Spacing="16" MaxWidth="640" HorizontalAlignment="Left">
+    <StackPanel Orientation="Horizontal" Spacing="14">
+      <Image Source="/Assets/roost_256.png" Width="64" Height="64"/>
+      <StackPanel VerticalAlignment="Center">
+        <TextBlock Text="Roost" FontSize="28" FontWeight="Bold"/>
+        <TextBlock>
+          <Run Text="{Binding Loc[About_Version]}"/><Run Text=" "/><Run Text="{Binding VersionText}"/>
+        </TextBlock>
+      </StackPanel>
+    </StackPanel>
+
+    <Border Classes="card">
+      <TextBlock Classes="muted" Text="{Binding Loc[About_Desc]}"/>
+    </Border>
+
+    <Border Classes="card" Background="#3A2A14" BorderBrush="#7A5A20">
+      <TextBlock Classes="muted" Foreground="#FFD79A" Text="{Binding Loc[About_Corp]}"/>
+    </Border>
+
+    <StackPanel Orientation="Horizontal" Spacing="12">
+      <Button Content="GitHub"
+              Command="{Binding OpenUrlCommand}" CommandParameter="https://github.com/bennymat93/Roost"/>
+      <TextBlock Text="{Binding Loc[About_License]}" VerticalAlignment="Center" Opacity="0.7"/>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

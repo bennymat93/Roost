@@ -1,0 +1,59 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Roost.ViewModels"
+        xmlns:views="clr-namespace:Roost.Views"
+        x:Class="Roost.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Width="1060" Height="700" MinWidth="940" MinHeight="600"
+        Icon="/Assets/roost.ico"
+        Title="Roost">
+
+  <Window.DataTemplates>
+    <DataTemplate DataType="vm:DashboardViewModel"><views:DashboardView/></DataTemplate>
+    <DataTemplate DataType="vm:InstallViewModel"><views:InstallView/></DataTemplate>
+    <DataTemplate DataType="vm:AppsViewModel"><views:AppsView/></DataTemplate>
+    <DataTemplate DataType="vm:EnginesViewModel"><views:EnginesView/></DataTemplate>
+    <DataTemplate DataType="vm:SettingsViewModel"><views:SettingsView/></DataTemplate>
+    <DataTemplate DataType="vm:AboutViewModel"><views:AboutView/></DataTemplate>
+  </Window.DataTemplates>
+
+  <Grid ColumnDefinitions="232,*">
+
+    <!-- Sidebar -->
+    <Border Grid.Column="0" Background="{DynamicResource SidebarBrush}">
+      <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="16,18,16,12" Spacing="10">
+          <Image Source="/Assets/roost_256.png" Width="36" Height="36"/>
+          <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="Roost" FontSize="20" FontWeight="Bold"/>
+            <TextBlock Text="{Binding Loc[App_Tagline]}" FontSize="10" Opacity="0.6"
+                       TextWrapping="Wrap" MaxWidth="150"/>
+          </StackPanel>
+        </StackPanel>
+
+        <!-- Status bar at the bottom -->
+        <Border DockPanel.Dock="Bottom" Padding="16,10" >
+          <StackPanel Spacing="4">
+            <ProgressBar IsIndeterminate="True" IsVisible="{Binding Busy}" Height="3"/>
+            <TextBlock Text="{Binding StatusText}" FontSize="11" Opacity="0.7" TextWrapping="Wrap"/>
+          </StackPanel>
+        </Border>
+
+        <ListBox Classes="nav" SelectedIndex="{Binding NavIndex, Mode=TwoWay}"
+                 Background="Transparent" BorderThickness="0" Margin="0,8,0,0">
+          <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Dashboard]}"/></ListBoxItem>
+          <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Install]}"/></ListBoxItem>
+          <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Apps]}"/></ListBoxItem>
+          <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Engines]}"/></ListBoxItem>
+          <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Settings]}"/></ListBoxItem>
+          <ListBoxItem><TextBlock Text="{Binding Loc[Nav_About]}"/></ListBoxItem>
+        </ListBox>
+      </DockPanel>
+    </Border>
+
+    <!-- Content -->
+    <ScrollViewer Grid.Column="1" Padding="28,24">
+      <ContentControl Content="{Binding Current}"/>
+    </ScrollViewer>
+  </Grid>
+</Window>

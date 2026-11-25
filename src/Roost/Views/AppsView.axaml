@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Roost.ViewModels"
+             xmlns:models="clr-namespace:Roost.Models"
+             xmlns:conv="clr-namespace:Roost.Converters"
+             x:Class="Roost.Views.AppsView"
+             x:DataType="vm:AppsViewModel"
+             x:CompileBindings="False"
+             x:Name="Root">
+  <StackPanel Spacing="16">
+    <TextBlock Classes="h1" Text="{Binding Loc[Apps_Title]}"/>
+
+    <Grid ColumnDefinitions="*,Auto">
+      <ComboBox Grid.Column="0" ItemsSource="{Binding Main.Engines}"
+                SelectedItem="{Binding Main.SelectedEngine, Mode=TwoWay}"
+                HorizontalAlignment="Stretch">
+        <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="models:AndroidEngine">
+            <TextBlock Text="{Binding DisplayName}"/>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+      <Button Grid.Column="1" Margin="8,0,0,0" Content="{Binding Loc[Common_Refresh]}"
+              Command="{Binding RefreshCommand}"/>
+    </Grid>
+
+    <ProgressBar IsIndeterminate="True" Height="3" IsVisible="{Binding Loading}"/>
+    <TextBlock Classes="muted" Text="{Binding Message}"
+               IsVisible="{Binding Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
+    <ItemsControl ItemsSource="{Binding Apps}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="models:InstalledApp">
+          <Border Classes="card" Margin="0,4" Padding="12">
+            <Grid ColumnDefinitions="44,*,Auto">
+              <Border Width="40" Height="40" CornerRadius="9" ClipToBounds="True"
+                      Background="{DynamicResource SidebarBrush}">
+                <Image Source="{Binding IconPath, Converter={x:Static conv:PathToBitmapConverter.Instance}}"
+                       Stretch="UniformToFill"/>
+              </Border>
+              <StackPanel Grid.Column="1" Margin="12,0" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Label}" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding PackageName}" FontSize="11" Opacity="0.6"/>
+              </StackPanel>
+              <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <Button Classes="accent"
+                        Content="{Binding #Root.DataContext.Loc[Common_Launch]}"
+                        Command="{Binding #Root.DataContext.LaunchCommand}"
+                        CommandParameter="{Binding}"/>
+                <Button Content="{Binding #Root.DataContext.Loc[Common_Shortcut]}"
+                        Command="{Binding #Root.DataContext.ShortcutCommand}"
+                        CommandParameter="{Binding}"/>
+                <Button Content="{Binding #Root.DataContext.Loc[Common_Uninstall]}"
+                        Command="{Binding #Root.DataContext.UninstallCommand}"
+                        CommandParameter="{Binding}"/>
+              </StackPanel>
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </StackPanel>
+</UserControl>

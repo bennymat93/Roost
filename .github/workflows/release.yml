@@ -1,0 +1,57 @@
+name: Build & Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Publish self-contained (single exe)
+        shell: pwsh
+        run: ./build.ps1
+
+      - name: Publish framework-dependent (small)
+        shell: pwsh
+        run: ./build.ps1 -FrameworkDependent
+
+      - name: Zip framework-dependent build
+        shell: pwsh
+        run: Compress-Archive -Path dist-fd/* -DestinationPath dist/Roost-framework-dependent.zip -Force
+
+      - name: Build installer (Inno Setup)
+        shell: pwsh
+        run: |
+          choco install innosetup --no-progress -y
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\Roost.iss
+          Copy-Item installer\Output\Roost-Setup.exe dist\Roost-Setup.exe
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Roost
+          path: |
+            dist/Roost.exe
+            dist/Roost-Setup.exe
+            dist/Roost-framework-dependent.zip
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/Roost.exe
+            dist/Roost-Setup.exe
+            dist/Roost-framework-dependent.zip
+          generate_release_notes: true

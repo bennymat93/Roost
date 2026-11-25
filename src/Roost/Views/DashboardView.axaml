@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Roost.ViewModels"
+             xmlns:models="clr-namespace:Roost.Models"
+             xmlns:conv="clr-namespace:Roost.Converters"
+             x:Class="Roost.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+  <StackPanel Spacing="18">
+    <TextBlock Classes="h1" Text="{Binding Loc[Dash_Welcome]}"/>
+    <TextBlock Classes="muted" MaxWidth="640" HorizontalAlignment="Left"
+               Text="{Binding Loc[Dash_Intro]}"/>
+
+    <Border Classes="card">
+      <StackPanel Spacing="10">
+        <TextBlock Classes="h2" Text="{Binding Loc[Dash_QuickInstall]}"/>
+        <TextBlock Classes="muted" Text="{Binding Loc[Dash_Drop]}"/>
+        <Button Content="{Binding Loc[Nav_Install]}" Command="{Binding GoInstallCommand}"
+                HorizontalAlignment="Left" Classes="accent"/>
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card">
+      <StackPanel Spacing="10">
+        <Grid ColumnDefinitions="*,Auto">
+          <TextBlock Classes="h2" Text="{Binding Loc[Dash_Engines]}"/>
+          <Button Grid.Column="1" Content="{Binding Loc[Common_Refresh]}"
+                  Command="{Binding RefreshCommand}"/>
+        </Grid>
+        <ItemsControl ItemsSource="{Binding Engines}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:AndroidEngine">
+              <Border Margin="0,4" Padding="12,8" CornerRadius="8"
+                      Background="{DynamicResource SidebarBrush}">
+                <Grid ColumnDefinitions="*,Auto">
+                  <StackPanel>
+                    <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding Endpoint}" FontSize="11" Opacity="0.6"/>
+                  </StackPanel>
+                  <TextBlock Grid.Column="1" VerticalAlignment="Center"
+                             Text="{Binding Status}" Foreground="{DynamicResource AccentBrush}"/>
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock Classes="muted" Text="{Binding Loc[Dash_NoEngines]}"
+                   IsVisible="{Binding Engines.Count, Converter={x:Static conv:IntConverters.IsZero}}"/>
+        <Button Content="{Binding Loc[Nav_Engines]}" Command="{Binding GoEnginesCommand}"
+                HorizontalAlignment="Left"/>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

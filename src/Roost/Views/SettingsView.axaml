@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Roost.ViewModels"
+             xmlns:conv="clr-namespace:Roost.Converters"
+             x:Class="Roost.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+  <StackPanel Spacing="16" MaxWidth="680" HorizontalAlignment="Left">
+    <TextBlock Classes="h1" Text="{Binding Loc[Set_Title]}"/>
+
+    <Border Classes="card">
+      <StackPanel Spacing="14">
+        <StackPanel Spacing="4">
+          <TextBlock Text="{Binding Loc[Set_Theme]}" FontWeight="SemiBold"/>
+          <ComboBox SelectedIndex="{Binding ThemeIndex, Mode=TwoWay}" MinWidth="220">
+            <ComboBoxItem Content="{Binding Loc[Set_Theme_System]}"/>
+            <ComboBoxItem Content="{Binding Loc[Set_Theme_Light]}"/>
+            <ComboBoxItem Content="{Binding Loc[Set_Theme_Dark]}"/>
+          </ComboBox>
+        </StackPanel>
+
+        <StackPanel Spacing="4">
+          <TextBlock Text="{Binding Loc[Set_Language]}" FontWeight="SemiBold"/>
+          <ComboBox SelectedIndex="{Binding LanguageIndex, Mode=TwoWay}" MinWidth="220">
+            <ComboBoxItem Content="{Binding Loc[Set_Lang_Auto]}"/>
+            <ComboBoxItem Content="{Binding Loc[Set_Lang_En]}"/>
+            <ComboBoxItem Content="{Binding Loc[Set_Lang_He]}"/>
+          </ComboBox>
+        </StackPanel>
+
+        <StackPanel Spacing="4">
+          <TextBlock Text="{Binding Loc[Set_Shortcut]}" FontWeight="SemiBold"/>
+          <ComboBox SelectedIndex="{Binding ShortcutIndex, Mode=TwoWay}" MinWidth="220">
+            <ComboBoxItem Content="{Binding Loc[Set_Sc_StartMenu]}"/>
+            <ComboBoxItem Content="{Binding Loc[Set_Sc_Desktop]}"/>
+            <ComboBoxItem Content="{Binding Loc[Set_Sc_Both]}"/>
+          </ComboBox>
+        </StackPanel>
+
+        <CheckBox IsChecked="{Binding AutoSuspend}" Content="{Binding Loc[Set_AutoSuspend]}"/>
+        <CheckBox IsChecked="{Binding StartWithWindows}" Content="{Binding Loc[Set_StartWin]}"/>
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card">
+      <StackPanel Spacing="12">
+        <TextBlock Classes="h2" Text="{Binding Loc[Set_Tools]}"/>
+        <StackPanel Spacing="4">
+          <TextBlock Text="{Binding Loc[Set_Adb]}" FontSize="12" Opacity="0.7"/>
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBox Text="{Binding AdbPath}" Watermark="adb.exe"/>
+            <Button Grid.Column="1" Margin="8,0,0,0" Content="{Binding Loc[Common_Browse]}" Click="OnBrowseAdb"/>
+          </Grid>
+          <TextBlock Text="{Binding AdbStatus}" FontSize="11" Opacity="0.6" TextWrapping="Wrap"/>
+        </StackPanel>
+        <StackPanel Spacing="4">
+          <TextBlock Text="{Binding Loc[Set_Aapt2]}" FontSize="12" Opacity="0.7"/>
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBox Text="{Binding Aapt2Path}" Watermark="aapt2.exe"/>
+            <Button Grid.Column="1" Margin="8,0,0,0" Content="{Binding Loc[Common_Browse]}" Click="OnBrowseAapt2"/>
+          </Grid>
+          <TextBlock Text="{Binding Aapt2Status}" FontSize="11" Opacity="0.6" TextWrapping="Wrap"/>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <StackPanel Orientation="Horizontal" Spacing="12">
+      <Button Classes="accent" Content="{Binding Loc[Common_Save]}" Command="{Binding SaveCommand}"/>
+      <TextBlock Text="{Binding Saved}" VerticalAlignment="Center"
+                 Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold"/>
+    </StackPanel>
+  </StackPanel>
+</UserControl>
