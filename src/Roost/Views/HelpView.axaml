@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Roost.ViewModels"
+             xmlns:svc="clr-namespace:Roost.Services"
+             x:Class="Roost.Views.HelpView"
+             x:DataType="vm:HelpViewModel">
+  <DockPanel LastChildFill="True">
+
+    <!-- Section tabs -->
+    <Border DockPanel.Dock="Top" Background="{DynamicResource SidebarBrush}"
+            CornerRadius="10" Padding="4" Margin="0,0,0,16">
+      <ListBox Classes="nav" ItemsSource="{Binding Sections}"
+               SelectedItem="{Binding SelectedSection, Mode=TwoWay}"
+               Background="Transparent" BorderThickness="0">
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel Orientation="Horizontal"/>
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="svc:HelpSection">
+            <TextBlock Text="{Binding Title}"/>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Border>
+
+    <!-- Section content -->
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Spacing="14" MaxWidth="660" HorizontalAlignment="Left"
+                  DataContext="{Binding SelectedSection}" x:DataType="svc:HelpSection">
+        <TextBlock Classes="h1" Text="{Binding Title}"/>
+        <TextBlock Classes="muted" Text="{Binding Intro}"/>
+
+        <Border Classes="card" IsVisible="{Binding HasImage}" Padding="8" HorizontalAlignment="Left">
+          <Image Source="{Binding Image}" Width="620" Stretch="Uniform"/>
+        </Border>
+
+        <ItemsControl ItemsSource="{Binding Steps}" IsVisible="{Binding HasSteps}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="svc:HelpStep">
+              <Grid ColumnDefinitions="34,*" Margin="0,5">
+                <Border Width="26" Height="26" CornerRadius="13" VerticalAlignment="Top"
+                        Background="{DynamicResource AccentBrush}">
+                  <TextBlock Text="{Binding Number}" Foreground="#06231F" FontWeight="Bold"
+                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock Grid.Column="1" Margin="10,2,0,0" Text="{Binding Text}" TextWrapping="Wrap"/>
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

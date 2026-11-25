@@ -28,6 +28,7 @@ public partial class MainViewModel : ViewModelBase
     public LinuxViewModel Linux { get; }
     public SettingsViewModel SettingsVm { get; }
     public AboutViewModel About { get; }
+    public HelpViewModel Help { get; }
 
     public MainViewModel(AppSettings settings)
     {
@@ -41,6 +42,7 @@ public partial class MainViewModel : ViewModelBase
         Linux = new LinuxViewModel(this);
         SettingsVm = new SettingsViewModel(this);
         About = new AboutViewModel(this);
+        Help = new HelpViewModel();
 
         Current = Dashboard;
     }
@@ -64,10 +66,12 @@ public partial class MainViewModel : ViewModelBase
             4 => Linux,
             5 => SettingsVm,
             6 => About,
+            7 => Help,
             _ => Dashboard,
         };
         if (value == 2) _ = Apps.LoadAsync();
         if (value == 4 && Linux.Distros.Count == 0) _ = Linux.RefreshAsync();
+        if (value == 7) Help.Reload();
     }
 
     public void Navigate(int index) => NavIndex = index;

@@ -4,6 +4,19 @@ All notable changes to Roost are documented here.
 This project follows [Semantic Versioning](https://semver.org/): every change,
 addition or fix bumps the version number.
 
+## [1.2.0] - 2025-11-25
+
+Added an in-app user guide.
+
+### Added
+- **Help / Guide** page in the sidebar — a full, bilingual (English + Hebrew)
+  user guide built into the app:
+  - Top-tab navigation across sections: Getting started, Set up an engine,
+    Install an app, Manage apps, Linux apps, Settings, Troubleshooting.
+  - Each section shows an **annotated screenshot** with numbered callouts that
+    match numbered step-by-step explanations.
+  - Screenshots and callouts mirror correctly for Hebrew (RTL).
+
 ## [1.1.0] - 2025-11-25
 
 Added Linux app support.

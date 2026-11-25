@@ -11,8 +11,8 @@
 
     <AssemblyName>Roost</AssemblyName>
     <Product>Roost</Product>
-    <Version>1.1.0</Version>
-    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.2.0</Version>
+    <FileVersion>1.2.0.0</FileVersion>
     <Company>Roost</Company>
     <Description>Install and run Android apps natively on Windows 11.</Description>
     <ApplicationIcon>Assets/roost.ico</ApplicationIcon>

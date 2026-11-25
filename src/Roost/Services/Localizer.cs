@@ -41,6 +41,7 @@ public sealed class Localizer
         ["Nav_Linux"] = ("Linux apps", "אפליקציות Linux"),
         ["Nav_Settings"] = ("Settings", "הגדרות"),
         ["Nav_About"] = ("About", "אודות"),
+        ["Nav_Help"] = ("Help / Guide", "עזרה / מדריך"),
 
         // Common
         ["Common_Refresh"] = ("Refresh", "רענון"),

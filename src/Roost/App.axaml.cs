@@ -65,6 +65,7 @@ public partial class App : Application
     {
         Localizer.Instance.SetLanguage(settings.Language);
         ApplyTheme(settings.Theme);
+        _main?.Help.Reload();
         if (_desktop is not null && _main is not null)
         {
             var old = _desktop.MainWindow;

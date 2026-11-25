@@ -16,6 +16,7 @@
     <DataTemplate DataType="vm:LinuxViewModel"><views:LinuxView/></DataTemplate>
     <DataTemplate DataType="vm:SettingsViewModel"><views:SettingsView/></DataTemplate>
     <DataTemplate DataType="vm:AboutViewModel"><views:AboutView/></DataTemplate>
+    <DataTemplate DataType="vm:HelpViewModel"><views:HelpView/></DataTemplate>
   </Window.DataTemplates>
 
   <Grid ColumnDefinitions="232,*">
@@ -49,12 +50,13 @@
           <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Linux]}"/></ListBoxItem>
           <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Settings]}"/></ListBoxItem>
           <ListBoxItem><TextBlock Text="{Binding Loc[Nav_About]}"/></ListBoxItem>
+          <ListBoxItem><TextBlock Text="{Binding Loc[Nav_Help]}"/></ListBoxItem>
         </ListBox>
       </DockPanel>
     </Border>
 
     <!-- Content -->
-    <ScrollViewer Grid.Column="1" Padding="28,24">
+    <ScrollViewer Grid.Column="1" Padding="28,24" HorizontalScrollBarVisibility="Disabled">
       <ContentControl Content="{Binding Current}"/>
     </ScrollViewer>
   </Grid>

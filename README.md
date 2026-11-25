@@ -73,6 +73,11 @@ A tool can't run Android apps by itself — it talks to an engine. Roost connect
 ### Linux apps (WSL)
 The **Linux apps** page runs Linux GUI software on Windows 11 through **WSL 2 + WSLg** (real, first-class on Windows 11 — not a hack). Roost detects your distributions, installs packages with `apt`, lists the installed GUI apps from their `.desktop` entries, and launches them or pins a native Start-Menu shortcut. WSL 2 needs the Virtual Machine Platform feature (`wsl --install`).
 
+### Built-in guide
+Roost ships a full **Help / Guide** page (English + Hebrew) with annotated screenshots and numbered, step-by-step instructions for every page — open it from the sidebar.
+
+<p align="center"><img src="docs/img/help.png" width="80%" alt="In-app guide"></p>
+
 ### Why no iOS / macOS yet
 iOS and macOS apps need Apple's own OS (Darwin/XNU) and frameworks, normally on Apple hardware. There is no working, general way to run them natively on Windows, so Roost does **not** pretend to — that support is on the roadmap only if a viable runtime path is validated, and will meet the same quality bar as Android.
 

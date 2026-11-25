@@ -36,7 +36,7 @@ var window = new MainWindow { DataContext = vm };
 window.FlowDirection = Localizer.Instance.Flow;
 window.Show();
 
-string[] pages = { "dashboard", "install", "apps", "engines", "linux", "settings", "about" };
+string[] pages = { "dashboard", "install", "apps", "engines", "linux", "settings", "about", "help" };
 for (int i = 0; i < pages.Length; i++)
 {
     vm.Navigate(i);
