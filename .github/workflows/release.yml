@@ -30,11 +30,11 @@ jobs:
         shell: pwsh
         run: Compress-Archive -Path dist-fd/* -DestinationPath dist/Roost-framework-dependent.zip -Force
 
-      - name: Build installer (Inno Setup)
+      - name: Build installer (NSIS)
         shell: pwsh
         run: |
-          choco install innosetup --no-progress -y
-          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\Roost.iss
+          choco install nsis --no-progress -y
+          & "C:\Program Files (x86)\NSIS\makensis.exe" installer\Roost.nsi
           Copy-Item installer\Output\Roost-Setup.exe dist\Roost-Setup.exe
 
       - name: Upload artifacts
