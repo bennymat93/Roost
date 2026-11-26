@@ -113,6 +113,13 @@ public sealed class Localizer
         ["Eng_AdbMissing"] = ("adb was not found. Set its path in Settings or place platform-tools next to Roost.",
                              "‏adb לא נמצא. הגדר נתיב ב'הגדרות' או הנח platform-tools ליד Roost."),
         ["Eng_DownloadAdb"] = ("Download adb automatically", "הורד adb אוטומטית"),
+        ["Eng_SetupTitle"] = ("Set up an engine", "הקמת מנוע"),
+        ["Eng_SetupIntro"] = ("Roost needs one Android engine. First enable virtualization, then install an engine (its own installer handles the rest).",
+                             "‏Roost צריך מנוע אנדרואיד אחד. תחילה הפעל וירטואליזציה, ואז התקן מנוע (המתקין שלו עושה את השאר)."),
+        ["Eng_EnableVm"] = ("Enable Virtual Machine Platform (admin)", "הפעל Virtual Machine Platform (מנהל)"),
+        ["Eng_VmStarted"] = ("Requested — approve the prompt, then restart Windows.", "התבקש — אשר את החלון, ואז הפעל מחדש את Windows."),
+        ["Eng_WsaBuilds"] = ("WSA builds", "גרסאות WSA"),
+        ["Eng_GetEngine"] = ("Install an engine:", "התקנת מנוע:"),
 
         // Settings
         ["Set_Title"] = ("Settings", "הגדרות"),

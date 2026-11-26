@@ -9,7 +9,7 @@ Unicode true
 !include "LogicLib.nsh"
 
 !ifndef APPVER
-  !define APPVER "1.3.1"
+  !define APPVER "1.3.2"
 !endif
 !define APPNAME "Roost"
 !define PUBLISHER "Roost"

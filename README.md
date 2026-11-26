@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/bennymat93/Roost/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/bennymat93/Roost/release.yml?branch=main&logo=github&label=build"></a>
-  <img src="https://img.shields.io/badge/version-1.3.1-2ec4b8">
+  <img src="https://img.shields.io/badge/version-1.3.2-2ec4b8">
   <img src="https://img.shields.io/badge/platform-Windows%2010%20%2F%2011-0a7bdc?logo=windows&logoColor=white">
   <img src="https://img.shields.io/badge/UI-Avalonia%20(.NET%208)-5a3fd6?logo=dotnet&logoColor=white">
   <img src="https://img.shields.io/badge/admin-not%20required-success">

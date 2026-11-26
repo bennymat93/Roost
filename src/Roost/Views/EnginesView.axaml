@@ -86,6 +86,31 @@
       </StackPanel>
     </Border>
 
+    <!-- Set up an engine -->
+    <Border Classes="card">
+      <StackPanel Spacing="10">
+        <TextBlock Classes="h2" Text="{Binding Loc[Eng_SetupTitle]}"/>
+        <TextBlock Classes="muted" Text="{Binding Loc[Eng_SetupIntro]}"/>
+        <Button Classes="accent" Content="{Binding Loc[Eng_EnableVm]}" Command="{Binding EnableVmPlatformCommand}"
+                HorizontalAlignment="Left"/>
+        <TextBlock Text="{Binding SetupStatus}" FontSize="12" Opacity="0.8"
+                   IsVisible="{Binding SetupStatus, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+        <TextBlock Text="{Binding Loc[Eng_GetEngine]}" FontWeight="SemiBold" Margin="0,4,0,0"/>
+        <WrapPanel Orientation="Horizontal">
+          <Button Margin="0,0,6,6" Content="{Binding Loc[Eng_WsaBuilds]}"
+                  Command="{Binding OpenUrlCommand}" CommandParameter="https://github.com/MustardChef/WSABuilds"/>
+          <Button Margin="0,0,6,6" Content="BlueStacks"
+                  Command="{Binding OpenUrlCommand}" CommandParameter="https://www.bluestacks.com/"/>
+          <Button Margin="0,0,6,6" Content="LDPlayer"
+                  Command="{Binding OpenUrlCommand}" CommandParameter="https://www.ldplayer.net/"/>
+          <Button Margin="0,0,6,6" Content="MuMu Player"
+                  Command="{Binding OpenUrlCommand}" CommandParameter="https://www.mumuplayer.com/"/>
+          <Button Margin="0,0,6,6" Content="Nox Player"
+                  Command="{Binding OpenUrlCommand}" CommandParameter="https://www.bignox.com/"/>
+        </WrapPanel>
+      </StackPanel>
+    </Border>
+
     <!-- Supported backends -->
     <Border Classes="card">
       <StackPanel Spacing="8">

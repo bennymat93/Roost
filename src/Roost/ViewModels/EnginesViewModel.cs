@@ -1,4 +1,6 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -100,6 +102,36 @@ public partial class EnginesViewModel : ViewModelBase
             VmPlatformText = Fmt(await SystemChecks.OptionalFeatureEnabledAsync("VirtualMachinePlatform"));
         }
         finally { Checking = false; }
+    }
+
+    [ObservableProperty] private string _setupStatus = "";
+
+    [RelayCommand]
+    private void OpenUrl(string? url)
+    {
+        if (string.IsNullOrEmpty(url)) return;
+        try { Process.Start(new ProcessStartInfo(url) { UseShellExecute = true }); }
+        catch { /* ignore */ }
+    }
+
+    /// <summary>Enable the Virtual Machine Platform feature (needs admin; prompts UAC).
+    /// This is the prerequisite for WSA and most emulators.</summary>
+    [RelayCommand]
+    private void EnableVmPlatform()
+    {
+        if (!OperatingSystem.IsWindows()) return;
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "dism.exe",
+                Arguments = "/online /enable-feature /featurename:VirtualMachinePlatform /all /norestart",
+                UseShellExecute = true,
+                Verb = "runas",   // elevate
+            });
+            SetupStatus = Loc["Eng_VmStarted"];
+        }
+        catch (Exception ex) { SetupStatus = ex.Message; }
     }
 
     private string Fmt(bool? v) => v switch

@@ -4,6 +4,14 @@ All notable changes to Roost are documented here.
 This project follows [Semantic Versioning](https://semver.org/): every change,
 addition or fix bumps the version number.
 
+## [1.3.2] - 2025-11-26
+
+### Added
+- **Engine setup help** on the Engines page: a one-click **"Enable Virtual
+  Machine Platform"** (elevates via UAC — the prerequisite for WSA/emulators),
+  and direct **install links** for WSA builds, BlueStacks, LDPlayer, MuMu and
+  Nox. Turns the detect-and-guide wizard into actionable setup.
+
 ## [1.3.1] - 2025-11-26
 
 ### Added
