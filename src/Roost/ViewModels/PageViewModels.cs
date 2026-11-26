@@ -121,7 +121,7 @@ public partial class AboutViewModel : ViewModelBase
 {
     public AboutViewModel(MainViewModel main) { }
 
-    public string VersionText => "1.3.0";
+    public string VersionText => "1.3.1";
 
     [RelayCommand]
     private void OpenUrl(string? url)

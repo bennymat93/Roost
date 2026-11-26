@@ -5,9 +5,11 @@
 Unicode true
 !include "MUI2.nsh"
 !include "FileFunc.nsh"
+!include "nsDialogs.nsh"
+!include "LogicLib.nsh"
 
 !ifndef APPVER
-  !define APPVER "1.3.0"
+  !define APPVER "1.3.1"
 !endif
 !define APPNAME "Roost"
 !define PUBLISHER "Roost"
@@ -41,11 +43,71 @@ VIAddVersionKey "LegalCopyright" "MIT License"
 !define MUI_FINISHPAGE_RUN "$INSTDIR\Roost.exe"
 !define MUI_FINISHPAGE_RUN_TEXT "Launch Roost now"
 
+; ---- default-engine chooser (custom page) ----
+Var Dialog
+Var RB_Auto
+Var RB_WSA
+Var RB_BS
+Var RB_LD
+Var RB_MuMu
+Var RB_Nox
+Var EngineId
+
+Function EnginePageCreate
+  !insertmacro MUI_HEADER_TEXT "Default Android engine" "Pick the engine Roost should use by default. You can change this anytime inside the app."
+  nsDialogs::Create 1018
+  Pop $Dialog
+  ${If} $Dialog == error
+    Abort
+  ${EndIf}
+  ${NSD_CreateLabel} 0 0 100% 20u "Roost runs Android apps through an engine (WSA or an emulator). Choose your preferred one; 'Auto-detect' simply uses whichever is running."
+  Pop $0
+  ${NSD_CreateRadioButton} 0 26u 100% 11u "Auto-detect (recommended)"
+  Pop $RB_Auto
+  ${NSD_CreateRadioButton} 0 40u 100% 11u "Windows Subsystem for Android (WSA)"
+  Pop $RB_WSA
+  ${NSD_CreateRadioButton} 0 54u 100% 11u "BlueStacks"
+  Pop $RB_BS
+  ${NSD_CreateRadioButton} 0 68u 100% 11u "LDPlayer"
+  Pop $RB_LD
+  ${NSD_CreateRadioButton} 0 82u 100% 11u "MuMu Player"
+  Pop $RB_MuMu
+  ${NSD_CreateRadioButton} 0 96u 100% 11u "Nox Player"
+  Pop $RB_Nox
+  ${NSD_Check} $RB_Auto
+  nsDialogs::Show
+FunctionEnd
+
+Function EnginePageLeave
+  StrCpy $EngineId ""
+  ${NSD_GetState} $RB_WSA $0
+  ${If} $0 == ${BST_CHECKED}
+    StrCpy $EngineId "127.0.0.1:58526"
+  ${EndIf}
+  ${NSD_GetState} $RB_BS $0
+  ${If} $0 == ${BST_CHECKED}
+    StrCpy $EngineId "127.0.0.1:5555"
+  ${EndIf}
+  ${NSD_GetState} $RB_LD $0
+  ${If} $0 == ${BST_CHECKED}
+    StrCpy $EngineId "127.0.0.1:5555"
+  ${EndIf}
+  ${NSD_GetState} $RB_MuMu $0
+  ${If} $0 == ${BST_CHECKED}
+    StrCpy $EngineId "127.0.0.1:7555"
+  ${EndIf}
+  ${NSD_GetState} $RB_Nox $0
+  ${If} $0 == ${BST_CHECKED}
+    StrCpy $EngineId "127.0.0.1:62001"
+  ${EndIf}
+FunctionEnd
+
 ; ---- pages ----
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "..\LICENSE"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
+Page custom EnginePageCreate EnginePageLeave
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_CONFIRM
@@ -87,6 +149,17 @@ Section "${APPNAME} (required)" SecMain
   ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
   IntFmt $0 "0x%08X" $0
   WriteRegDWORD HKCU "${UNINSTKEY}" "EstimatedSize" "$0"
+
+  ; Pre-seed the chosen default engine (only when the app has no settings yet,
+  ; so an existing user's configuration is never overwritten).
+  ${If} $EngineId != ""
+    ${IfNot} ${FileExists} "$APPDATA\${APPNAME}\settings.json"
+      CreateDirectory "$APPDATA\${APPNAME}"
+      FileOpen $9 "$APPDATA\${APPNAME}\settings.json" w
+      FileWrite $9 '{$\r$\n  "DefaultEngineId": "$EngineId"$\r$\n}$\r$\n'
+      FileClose $9
+    ${EndIf}
+  ${EndIf}
 SectionEnd
 
 Section "Desktop shortcut" SecDesktop

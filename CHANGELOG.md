@@ -4,6 +4,15 @@ All notable changes to Roost are documented here.
 This project follows [Semantic Versioning](https://semver.org/): every change,
 addition or fix bumps the version number.
 
+## [1.3.1] - 2025-11-26
+
+### Added
+- The installer now has a **"Default Android engine"** page: pick WSA, BlueStacks,
+  LDPlayer, MuMu, Nox, or Auto-detect, and the choice is pre-seeded as Roost's
+  default engine (written to `settings.json` only when no settings exist yet, so
+  an existing configuration is never overwritten). The app still auto-detects and
+  connects to whatever engine is running.
+
 ## [1.3.0] - 2025-11-25
 
 ### Added
